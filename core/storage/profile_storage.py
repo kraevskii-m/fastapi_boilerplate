@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
-from core.model.profile import Profile
+from core.model.profile import ProfileDB
 from core.storage.db.postgres import DB
 from core.utils import throw_not_found
 
@@ -12,10 +12,10 @@ class ProfileStorage:
 
     async def get_by_id(
         self, profile_id: UUID, throw_error: bool = False
-    ) -> Optional[Profile]:
+    ) -> Optional[ProfileDB]:
         sql = "SELECT * FROM profile WHERE (id = $1)"
         row = await self.db.fetch_row(sql, profile_id)
         if not row and throw_error:
             throw_not_found("No user with this id!")
-        profile = Profile.parse_obj(row)
+        profile = ProfileDB.parse_obj(row)
         return profile
