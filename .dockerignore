@@ -3,7 +3,6 @@ tests
 .idea
 /.env
 /.env.example
-/.pylintrc
 
 /docker-compose.yml
 /README.md

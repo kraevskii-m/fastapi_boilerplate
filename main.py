@@ -1,4 +1,3 @@
-# pylint: disable=wrong-import-position
 """
 Main config file for FastAPI
 """
