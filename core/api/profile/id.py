@@ -1,13 +1,14 @@
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from core.auth import get_current_profile
 from core.model.profile import ProfileDB
-from core.registry import profile_storage
 
 router = APIRouter()
 
 
-@router.get("/id")
-async def profile_by_id(profile_id: UUID) -> ProfileDB:
-    return await profile_storage.get_by_id(profile_id)
+@router.get("/current", response_model=ProfileDB)
+async def get_current_profile(current_profile: Annotated[ProfileDB, Depends(get_current_profile)]) -> ProfileDB:
+    return current_profile

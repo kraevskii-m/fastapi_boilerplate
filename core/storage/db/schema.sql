@@ -4,16 +4,16 @@ DROP TABLE IF EXISTS profile;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE
-OR REPLACE FUNCTION update_column_updated()
+    OR REPLACE FUNCTION update_timestamp()
     RETURNS TRIGGER AS
 $$
 BEGIN
     NEW.updated
-= now();
-RETURN NEW;
+        = now();
+    RETURN NEW;
 END;
 $$
-LANGUAGE 'plpgsql';
+    LANGUAGE 'plpgsql';
 
 CREATE TABLE profile
 (
@@ -23,13 +23,13 @@ CREATE TABLE profile
     created    TIMESTAMPTZ DEFAULT now(),
     updated    TIMESTAMPTZ DEFAULT now(),
     password   TEXT        DEFAULT NULL,
-    email      TEXT        DEFAULT NULL
+    email      TEXT        DEFAULT NULL UNIQUE
 );
 
 CREATE TRIGGER update_my_table_timestamp
     BEFORE UPDATE
     ON profile
     FOR EACH ROW
-    EXECUTE FUNCTION update_timestamp();
+EXECUTE FUNCTION update_timestamp();
 
 COMMIT;

@@ -17,5 +17,15 @@ class ProfileStorage:
         row = await self.db.fetch_row(sql, profile_id)
         if not row and throw_error:
             throw_not_found("No user with this id!")
-        profile = ProfileDB.parse_obj(row)
+        profile = ProfileDB.model_validate(row)
+        return profile
+
+    async def get_by_email(
+        self, username: str, throw_error: bool = False
+    ) -> Optional[ProfileDB]:
+        sql = "SELECT * FROM profile WHERE (email = $1)"
+        row = await self.db.fetch_row(sql, username)
+        if not row and throw_error:
+            throw_not_found("No user with this id!")
+        profile = ProfileDB.model_validate(row)
         return profile
